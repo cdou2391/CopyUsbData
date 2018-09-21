@@ -11,9 +11,9 @@ namespace CopyUSB
     {
         static void Main(string[] args)
         {
-            string path1 = @"E:\";
+            string path1 = @"I:\";
             string path2 = @"H:\";
-            string path3 = @"G:\";
+            string path3 = @"F:\";
             string pathToCopy;
             string[] files;
             
@@ -31,30 +31,41 @@ namespace CopyUSB
                 pathToCopy = path3;
             }
             int x = 0;
-            try
+            Decision:
+            Console.WriteLine("Do you want to copy the files in: " + pathToCopy + "?   y/n");
+            string answer = Console.ReadLine();
+            if(answer=="y" || answer == "Y")
             {
-                files = Directory.GetFiles(pathToCopy, ".", SearchOption.AllDirectories);
-                int numFiles = files.Length;
-                Console.WriteLine("Copy all the " + numFiles.ToString() + " files?");
-                string ans = Console.ReadLine();
-                if (ans.ToLower() == "yes" || ans.ToLower()=="y")
+                try
                 {
-                    foreach (var fil in files)
+                    files = Directory.GetFiles(pathToCopy, ".",SearchOption.TopDirectoryOnly);
+                    int numFiles = files.Length;
+                    Console.WriteLine("Copy all the " + numFiles.ToString() + " files?");
+                    string ans = Console.ReadLine();
+                    if (ans.ToLower() == "yes" || ans.ToLower()=="y")
                     {
-                        FileInfo fileInf = new FileInfo(fil);
-                        File.Copy(fil, newPath + fileInf.Name, true);
-                        x++;
+                        foreach (var fil in files)
+                        {
+                            FileInfo fileInf = new FileInfo(fil);
+                            File.Copy(fil, newPath + fileInf.Name, true);
+                            x++;
+                        }
+                        Console.WriteLine("All " + x + " file copied");
                     }
-                    Console.WriteLine("All " + x + " file copied");
+                    else { Console.WriteLine("No files were copied!"); }
                 }
-                else { Console.WriteLine("No files were copied!"); }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
-            catch (Exception ex)
+            else if(answer=="n" || answer == "N")
             {
-                Console.WriteLine(ex);
-            }
-            
 
+            }
+            else{
+                goto Decision;
+            }
             Console.Read();
         }
     }
